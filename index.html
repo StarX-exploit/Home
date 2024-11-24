@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Star X Key</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-tomorrow.min.css" integrity="sha512-GzUgyYPXBeEUhR0Rxp6Q5QHCErxQKlelfO8d/6erDIt3QWm5i3dxJEFvqaxRj7MbFMOqco7y5hAICJ5uRcdCBg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: black;
+            font-family: 'Courier New', Courier, monospace;
+            color: white;
+            overflow: hidden;
+            position: relative;
+            perspective: 1000px;
+        }
+
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index: -1;
+        }
+
+        .key-container {
+            text-align: center;
+            z-index: 1;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #3fc9ff;
+            box-shadow: 0 0 15px #3cd5ff;
+            max-width: 600px;
+            width: 90%;
+            transition: transform 0.1s, box-shadow 0.3s;
+            transform-style: preserve-3d;
+        }
+
+        .key-container:hover {
+            box-shadow: 0 0 25px rgba(0, 204, 255, 0.8);
+        }
+
+        .key-container img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid #3fc9ff;
+            margin-bottom: 10px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .key-container img:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(0, 204, 255, 0.8);
+        }
+
+        .key-container button {
+            padding: 8px 16px;
+            font-size: 14px;
+            background-color: #00ddff;
+            color: #000000;
+            border: 2px solid transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.2s;
+            margin: 6px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .key-container button:hover {
+            background-color: #00d9ff;
+            border-color: #8b00cc;
+            box-shadow: 0 8px 20px rgba(119, 0, 255, 0.8);
+            transform: scale(1.05);
+        }
+
+        .key-container button:active {
+            background-color: #5500aa;
+            border-color: #5500aa;
+            box-shadow: 0 4px 10px rgba(119, 0, 255, 0.6);
+            transform: scale(0.98);
+        }
+
+        .key-container .typewriter span {
+            display: inline-block;
+            font-size: 16px;
+            color: #a661f5;
+            letter-spacing: 1px;
+            margin-top: 10px;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal-content {
+            background-color: rgba(0, 0, 0, 0.9);
+            border: 1px solid #3fc9ff;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            width: 320px;
+            animation: slideIn 0.5s ease-in-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal button {
+            margin: 10px;
+            padding: 12px;
+            background-color: #3fc9ff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 80%;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .modal button:hover {
+            background-color: #00d9ff;
+            transform: scale(1.05);
+        }
+
+        .modal button:active {
+            background-color: #5500aa;
+            transform: scale(0.95);
+        }
+
+        .modal .title {
+            color: #690096;
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+
+        /* Close modal button */
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .modal-close:hover {
+            color: #3fc9ff;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div class="key-container">
+        <img src="profiles.jpg" alt="Profile">
+        <p>Star X Hub</p>
+        <button onclick="showModal()">Choose an Option</button>
+        <div class="typewriter">
+            <span id="typewriter"></span>
+        </div>
+    </div>
+
+    <!-- Modal for Options -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <h2 class="title">Choose an Option</h2>
+            <button onclick="getKey()">Get Key</button>
+            <button onclick="getScript()">Get Script</button>
+            <button onclick="joinDiscord()">Join Discord</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+    <script>
+        // Particles.js configuration
+        particlesJS('particles-js', {
+            "particles": {
+                "number": {
+                    "value": 80,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
+                    }
+                },
+                "color": {
+                    "value": "#7700ff"
+                },
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#000000"
+                    },
+                    "polygon": {
+                        "nb_sides": 5
+                    }
+                },
+                "opacity": {
+                    "value": 0.5,
+                    "random": false,
+                    "anim": {
+                        "enable": false,
+                        "speed": 1,
+                        "opacity_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "size": {
+                    "value": 3,
+                    "random": true,
+                    "anim": {
+                        "enable": false,
+                        "speed": 40,
+                        "size_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#7700ff",
+                    "opacity": 0.4,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 6,
+                    "direction": "none",
+                    "random": false,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false,
+                    "attract": {
+                        "enable": false,
+                        "rotateX": 600,
+                        "rotateY": 1200
+                    }
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "push"
+                    }
+                }
+            }
+        });
+
+        const messages = [
+            "Over 40k Execute",
+            "Best Script Hub",
+            "Join The Discord For Easy Key!",
+            "Have Over 1 Scripts!"
+        ];
+        let currentMessage = 0;
+        let currentChar = 0;
+        let isDeleting = false;
+        const typewriterElement = document.getElementById('typewriter');
+
+        function type() {
+            const currentText = messages[currentMessage];
+            const displayText = isDeleting
+                ? currentText.substring(0, currentChar--)
+                : currentText.substring(0, currentChar++);
+
+            typewriterElement.textContent = displayText;
+
+            if (!isDeleting && currentChar === currentText.length) {
+                setTimeout(() => {
+                    isDeleting = true;
+                }, 2000);
+            } else if (isDeleting && currentChar === 0) {
+                isDeleting = false;
+                currentMessage = (currentMessage + 1) % messages.length;
+            }
+
+            const speed = isDeleting ? 50 : 100;
+            setTimeout(type, speed);
+        }
+
+        function startTypewriter() {
+            type();
+        }
+
+        startTypewriter();
+
+        // Modal functions
+        function showModal() {
+            document.getElementById('myModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('myModal').style.display = 'none';
+        }
+
+        function getKey() {
+            window.location.href = "https://key-home.vercel.app/";
+        }
+
+        function getScript() {
+            window.location.href = "https://script-starx.vercel.app/";
+        }
+
+        function joinDiscord() {
+            window.location.href = "https://discord.gg/EwARkGncq4";
+        }
+    </script>
+</body>
+</html>
